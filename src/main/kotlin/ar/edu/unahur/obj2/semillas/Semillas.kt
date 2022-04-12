@@ -1,37 +1,62 @@
 package ar.edu.unahur.obj2.semillas
 
-class Menta(var altura: Double, val anioSemilla: Int) {
-    fun espacio(): Double {
-        TODO("Te la debo, amigue...")
-    }
+package ar.edu.unahur.obj2.semillas
 
-    fun daSemillas(): Boolean {
-        TODO("Colgue, che...")
+open class Planta(var altura: Double, val anioSemilla: Int) {
+    object Constantes{
+        val humbralHorasSol = 9
     }
+    open fun esFuerte() = Constantes.humbralHorasSol >= 9
 
-    fun esFuerte(): Boolean {
-        TODO("Estas seguro que lo queres implementar así?")
-    }
+    open fun daSemillas()= false
+
+    open fun espacio()= 0.0
 
 }
+open class Menta(altura: Double, anioSemilla: Int): Planta(altura , anioSemilla) {
+    private val horasDeSolToleradas = 7
 
-class Soja(var altura: Double, val anioSemilla: Int) {
-    fun espacio(): Double {
-        TODO("Lee un poco más el enunciado...")
-    }
+    override fun daSemillas()= espacio() >= 1.4
 
-    fun daSemillas(): Boolean {
-        TODO("Dalee")
-    }
+    override fun esFuerte() = horasDeSolToleradas > Planta.Constantes.humbralHorasSol
 
-    fun esFuerte(): Boolean {
-        TODO("Así me implementas mejor")
-    }
+    override fun espacio()= altura+1
 }
 
-class Planta(var altura: Double, val anioSemilla: Int) {
-    fun espacio() {
-        TODO("Pasaron cosas")
-    }
+open class Soja(altura: Double, anioSemilla: Int): Planta(altura , anioSemilla)  {
+    private fun horasDeSolToleradas() =
+        if (altura < 0.5) {
+            6
+        }
+        else if(altura < 1){
+            8
+        }
+        else {
+            6
+        }
+    override fun espacio()= altura/2
 
+
+    override fun daSemillas()= anioSemilla > 2007 && altura > 0.75 && altura < 0.9
+
+
+
+    override fun esFuerte() = horasDeSolToleradas() > Planta.Constantes.humbralHorasSol
+}
+class Quinoa (altura: Double, anioSemilla: Int): Planta(altura , anioSemilla) {
+    fun horasDeSolToleradas() =
+        if (espacio() < 0.3) {10}
+        else {9}
+
+    override fun esFuerte()= horasDeSolToleradas() == 10
+
+    override fun daSemillas()= anioSemilla in 2002..2008 || esFuerte()
+
+    override fun espacio()= altura
+}
+class Peperina(altura: Double, anioSemilla: Int): Menta(altura , anioSemilla) {
+    override fun espacio()= super.espacio() * 2
+}
+class SojaTransgénica(altura: Double, anioSemilla: Int): Soja(altura , anioSemilla) {
+    override fun daSemillas()= false
 }
