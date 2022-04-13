@@ -1,7 +1,5 @@
 package ar.edu.unahur.obj2.semillas
 
-package ar.edu.unahur.obj2.semillas
-
 open class Planta(var altura: Double, val anioSemilla: Int) {
     object Constantes{
         val humbralHorasSol = 9

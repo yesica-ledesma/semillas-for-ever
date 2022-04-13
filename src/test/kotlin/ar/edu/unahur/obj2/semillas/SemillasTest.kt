@@ -15,6 +15,7 @@ class SemillasTest : DescribeSpec ({
         val quinoa = Quinoa(0.2, 2010)
         val quinoata = Quinoa(0.9, 2006)
         val peperina = Peperina(1.0, 2021)
+        val sojaT = SojaTransgénica(1.0, 2021)
 
 
         it("probamos los atributos altura  y anioSemilla") {
@@ -28,6 +29,7 @@ class SemillasTest : DescribeSpec ({
             soja.daSemillas().shouldBeFalse()
             quinoa.daSemillas().shouldBeTrue()
             quinoata.daSemillas().shouldBeTrue()
+            sojaT.daSemillas().shouldBeFalse()
         }
 
         it("es fuerte") {
