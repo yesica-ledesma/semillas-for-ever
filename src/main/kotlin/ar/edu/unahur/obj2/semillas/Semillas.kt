@@ -9,6 +9,8 @@ open class Planta(var altura: Double, val anioSemilla: Int) {
     open fun daSemillas()= false
 
     open fun espacio()= 0.0
+    
+    open fun esIdealLa_(parcela: Parcela)= false
 
 }
 open class Menta(altura: Double, anioSemilla: Int): Planta(altura , anioSemilla) {
@@ -19,6 +21,8 @@ open class Menta(altura: Double, anioSemilla: Int): Planta(altura , anioSemilla)
     override fun esFuerte() = horasDeSolToleradas > Planta.Constantes.humbralHorasSol
 
     override fun espacio()= altura+1
+    
+    override fun esIdealLa_(parcela: Parcela)= parcela.superficieDeParcelas > 6
 }
 
 open class Soja(altura: Double, anioSemilla: Int): Planta(altura , anioSemilla)  {
@@ -34,12 +38,12 @@ open class Soja(altura: Double, anioSemilla: Int): Planta(altura , anioSemilla) 
         }
     override fun espacio()= altura/2
 
-
     override fun daSemillas()= anioSemilla > 2007 && altura > 0.75 && altura < 0.9
 
-
-
     override fun esFuerte() = horasDeSolToleradas() > Planta.Constantes.humbralHorasSol
+    
+    override fun esIdealLa_(parcela: Parcela)= parcela.horasDeSolQueRecibe == horasDeSolToleradas
+
 }
 class Quinoa (altura: Double, anioSemilla: Int): Planta(altura , anioSemilla) {
     fun horasDeSolToleradas() =
@@ -51,12 +55,16 @@ class Quinoa (altura: Double, anioSemilla: Int): Planta(altura , anioSemilla) {
     override fun daSemillas()= anioSemilla in 2002..2008 || esFuerte()
 
     override fun espacio()= altura
+   
+    override fun esIdealLa_(parcela: Parcela)= parcela.plantasEnParcela.all{ it.altura < 1.5}
 }
 class Peperina(altura: Double, anioSemilla: Int): Menta(altura , anioSemilla) {
     override fun espacio()= super.espacio() * 2
+     override fun esIdealLa_(parcela: Parcela)= parcela.superficieDeParcelas > 6
 }
 class SojaTransgénica(altura: Double, anioSemilla: Int): Soja(altura , anioSemilla) {
     override fun daSemillas()= false
+    override fun esIdealLa_(parcela: Parcela)= parcela.cantidadDePlantasQueTolera()== 1
 }
 class Parcela(var ancho:Int, var largo:Int, var horasDeSolQueRecibe:Int) {
 
