@@ -20,12 +20,20 @@ class Parcela(var ancho:Int, var largo:Int, var horasDeSolQueRecibe:Int) {
             println("Error no se puede agregar Planta, por no haber espacio o no cumple con las especificaciones")
         }
     }
+    
+    fun cantidadPlantas(): Int {
+    val cantidad = mutableSetOf<Planta>()
+    for (i in this.plantasEnParcela){ cantidad.add(i) }
+    
+    return cantidad.size
+  }
     open class ParcelaEcologica(ancho : Double, largo : Double, horasDeSolQueRecibe : Int) : Parcelas(ancho, largo ,horasDeSolQueRecibe) {
-        fun seAsociaA_(planta : Planta) = !this.tieneComplicaciones() and planta.esIdealLa_(this)
+        override fun seAsociaA_(planta : Planta) = !this.tieneComplicaciones() and planta.esIdealLa_(this)
 
     }
 
-    open class ParcelaIndustrial(ancho : Double, largo : Double, horasDeSolQueRecibe : Int) : Parcelas(ancho, largo, horasDeSolQueRecibe) {
-        fun seAsociaA_(planta : Planta) = (this.plantas.size <= 2) and (planta.esFuerte())
+   class ParcelaIndustrial(ancho : Int, largo : Int, horasDeSolQueRecibe : Int) : Parcela(ancho, largo, horasDeSolQueRecibe) {
+        override fun seAsociaA_(planta:Planta) = (cantidadPlantas() <= 2) and (planta.esFuerte())
 
+}
 
