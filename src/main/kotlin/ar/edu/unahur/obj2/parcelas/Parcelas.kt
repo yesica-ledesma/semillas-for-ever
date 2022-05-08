@@ -1,7 +1,7 @@
-class Parcela(var ancho:Int, var largo:Int, var horasDeSolQueRecibe:Int) {
+package ar.edu.unahur.obj2.semillas
 
+open class Parcela(var ancho:Double, var largo:Double, var horasDeSolQueRecibe:Int) {
     var plantasEnParcela= mutableListOf<Planta>()
-
     var superficieDeParcelas = ancho*largo
 
     fun cantidadDePlantasQueTolera() =
@@ -10,7 +10,7 @@ class Parcela(var ancho:Int, var largo:Int, var horasDeSolQueRecibe:Int) {
 
     //Sí si alguna de sus plantas tolera menos sol del que recibe la parcela;
     fun tieneComplicaciones()=
-        plantasEnParcela.any{ it.horasDeSolToleradas <= horasDeSolQueRecibe }
+        plantasEnParcela.any{ it.horasDeSolToleradas < horasDeSolQueRecibe }
 
     fun plantarLa_(planta:Planta) {
         if(cantidadDePlantasQueTolera() > plantasEnParcela.size && planta.horasDeSolToleradas+2 >= horasDeSolQueRecibe ) {
@@ -20,20 +20,46 @@ class Parcela(var ancho:Int, var largo:Int, var horasDeSolQueRecibe:Int) {
             println("Error no se puede agregar Planta, por no haber espacio o no cumple con las especificaciones")
         }
     }
-    
+    // devuelve cantidad de plantas diferentes que hay
     fun cantidadPlantas(): Int {
-    val cantidad = mutableSetOf<Planta>()
-    for (i in this.plantasEnParcela){ cantidad.add(i) }
-    
-    return cantidad.size
-  }
-    open class ParcelaEcologica(ancho : Double, largo : Double, horasDeSolQueRecibe : Int) : Parcelas(ancho, largo ,horasDeSolQueRecibe) {
-        override fun seAsociaA_(planta : Planta) = !this.tieneComplicaciones() and planta.esIdealLa_(this)
-
+        val cantidad = mutableSetOf<Planta>()
+        for (i in this.plantasEnParcela){
+            cantidad.add(i)
+        }
+        return cantidad.size
     }
+    open fun seAsociaA_(planta : Planta) = false
+    open fun porcentajeDeAsociacion(): Double =0.0
+}
 
-   class ParcelaIndustrial(ancho : Int, largo : Int, horasDeSolQueRecibe : Int) : Parcela(ancho, largo, horasDeSolQueRecibe) {
-        override fun seAsociaA_(planta:Planta) = (cantidadPlantas() <= 2) and (planta.esFuerte())
+class ParcelaEcologica(ancho : Double, largo : Double, horasDeSolQueRecibe : Int) : Parcela(ancho, largo ,horasDeSolQueRecibe) {
+    override fun seAsociaA_(planta : Planta) = !this.tieneComplicaciones() && planta.esIdealLa(this)
+    override fun porcentajeDeAsociacion():Double =
+        100.0*plantasEnParcela.count { this.seAsociaA_(it) } / plantasEnParcela.size
+}
+
+class ParcelaIndustrial(ancho : Double, largo : Double, horasDeSolQueRecibe : Int) : Parcela(ancho, largo, horasDeSolQueRecibe) {
+    override fun seAsociaA_(planta:Planta) = (cantidadPlantas() <= 2) and (planta.esFuerte())
+
+}
+
+  open fun porcentajeDeAsociacion(): Double =0.0
+
+
+
+
+}
+class ParcelaEcologica(ancho : Double, largo : Double, horasDeSolQueRecibe : Int) : Parcela(ancho, largo ,horasDeSolQueRecibe) {
+
+  override fun seAsociaA_(planta : Planta) = !this.tieneComplicaciones() && planta.esIdealLa(this)
+
+  override fun porcentajeDeAsociacion():Double =
+    100.0*plantasEnParcela.count { this.seAsociaA_(it) } / plantasEnParcela.size
+}
+
+class ParcelaIndustrial(ancho : Double, largo : Double, horasDeSolQueRecibe : Int) : Parcela(ancho, largo, horasDeSolQueRecibe) {
+
+  override fun seAsociaA_(planta:Planta) = (cantidadPlantas() <= 2) and (planta.esFuerte())
 
 }
 
